@@ -1,0 +1,57 @@
+<%- include('../partials/top') %>
+
+<div class="wrap">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <ol><li><a href="/">Home</a></li><li><a href="/careers">Careers</a></li><li>Interview questions</li></ol>
+  </nav>
+
+  <div class="page-head">
+    <h1>Interview question bank</h1>
+    <p class="lede">
+      Useful from both sides of the table. If you are interviewing candidates, these are
+      questions that produce evidence rather than rehearsed answers.
+    </p>
+    <div class="inset inset--brand">
+      <p class="mb-0">
+        <strong>Preparing?</strong> Do not memorise answers. Prepare five stories &mdash; a
+        recovery, a failure, a difficult stakeholder, a team you improved, and a decision you got
+        wrong &mdash; each with numbers in it. Almost every question below can be answered from
+        one of those five.
+      </p>
+    </div>
+  </div>
+
+  <% bank.forEach(function (t) { %>
+    <section class="mb-6">
+      <h2><%= t.theme %></h2>
+      <div class="panel panel--brand">
+        <p class="mb-0"><strong>What they are listening for.</strong> <%= t.forCandidates %></p>
+      </div>
+      <ul class="list-spaced mt-4">
+        <% t.questions.forEach(function (qq) { %><li><%= qq %></li><% }) %>
+      </ul>
+    </section>
+  <% }) %>
+
+  <div class="panel">
+    <h2 class="mt-0">If you are the one interviewing</h2>
+    <ul>
+      <li>Ask for specifics until you reach a number, a date or a name. Vague answers are usually
+        vague experience.</li>
+      <li>Follow up every success story with "what would you do differently?". The answer
+        separates people who reflect from people who narrate.</li>
+      <li>Use the same questions for every candidate, score against agreed criteria written
+        before you started, and score independently before you discuss. It is the single most
+        effective debiasing measure available and it costs nothing.</li>
+      <li>Tell candidates the format in advance, including who they will meet and what each stage
+        assesses. Withholding it does not test resilience, it tests luck.</li>
+      <li>Give feedback to unsuccessful candidates. The delivery community is small and you will
+        meet them again.</li>
+    </ul>
+    <p class="mb-0">
+      Released under <a href="/legal/licence">CC BY 4.0</a> &mdash; put it in your hiring pack.
+    </p>
+  </div>
+</div>
+
+<%- include('../partials/bottom') %>

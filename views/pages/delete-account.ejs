@@ -1,0 +1,90 @@
+<%- include('../partials/top') %>
+
+<div class="wrap wrap--narrow">
+  <div class="page-head">
+    <h1>Delete your account</h1>
+    <p class="lede">
+      This is immediate and permanent. There is no soft delete, no thirty-day grace period and
+      no support agent who can undo it.
+    </p>
+  </div>
+
+  <%- include('../partials/error-summary') %>
+
+  <div class="panel mb-6">
+    <h2 class="mt-0">What gets deleted</h2>
+    <ul>
+      <li>Your account: email address, name, password hash and any optional profile fields.</li>
+      <li>Your download history and saved templates.</li>
+      <li>Your learning progress and all assessment results.</li>
+      <li>Every retro board you created, and every note on them.</li>
+      <li>Your consent records.</li>
+    </ul>
+
+    <h2>What we keep, and why</h2>
+    <ul>
+      <li>
+        <strong>A deletion receipt</strong> &mdash; a one-way salted hash of your email address
+        plus today's date. It is our evidence that we honoured your request, and it cannot be
+        reversed to recover your email address. Kept for 6 years.
+      </li>
+      <li>
+        <strong>Anonymised security log entries</strong> &mdash; the account-security events for
+        your account with the user id, email, IP hash and detail removed, leaving a bare event
+        type and timestamp. Once the identifiers are gone these are no longer personal data.
+      </li>
+      <li>
+        <strong>Aggregate download counts</strong> &mdash; the number of times each template was
+        downloaded, with no link to you or to anyone.
+      </li>
+    </ul>
+    <p class="mb-0">
+      Backups are rotated within 35 days, after which no copy of your data exists anywhere.
+      We will email you a confirmation saying exactly this.
+    </p>
+  </div>
+
+  <div class="notice notice--warn">
+    <h2>Want your data first?</h2>
+    <p>
+      Download it before you delete &mdash; once deleted we cannot produce it.
+      <a href="/account/data.json">Export as JSON</a> or
+      <a href="/account/data.txt">as plain text</a>.
+    </p>
+  </div>
+
+  <form method="post" action="/account/delete" novalidate>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+    <% function derr(field) { return (errors || []).find(function (e) { return e.field === field; }); } %>
+
+    <div class="form-group <%= derr('password') ? 'form-group--error' : '' %>">
+      <label for="password">Confirm your password</label>
+      <span class="hint" id="del-pw-hint">So we know it is you and not someone using your open browser.</span>
+      <% if (derr('password')) { %><span class="error-message" id="password-error"><span class="visually-hidden">Error:</span> <%= derr('password').message %></span><% } %>
+      <input type="password" id="password" name="password" autocomplete="current-password"
+             aria-describedby="del-pw-hint <%= derr('password') ? 'password-error' : '' %>"
+             <%= derr('password') ? 'aria-invalid="true"' : '' %>>
+    </div>
+
+    <div class="form-group">
+      <label for="reason">Why are you leaving? <span class="hint">Optional. Genuinely useful to us, and it is not kept against your name &mdash; it goes on the deletion receipt, which has no recoverable identifier.</span></label>
+      <textarea id="reason" name="reason" rows="3" maxlength="200"></textarea>
+    </div>
+
+    <div class="form-group <%= derr('confirm') ? 'form-group--error' : '' %>">
+      <% if (derr('confirm')) { %><span class="error-message" id="confirm-error"><span class="visually-hidden">Error:</span> <%= derr('confirm').message %></span><% } %>
+      <div class="checkbox">
+        <input type="checkbox" id="confirm" name="confirm" value="yes" <%= derr('confirm') ? 'aria-invalid="true" aria-describedby="confirm-error"' : '' %>>
+        <label for="confirm">I understand this is permanent and cannot be undone.</label>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn--accent" type="submit">Delete my account permanently</button>
+      <a class="btn btn--secondary" href="/account">Cancel and go back</a>
+    </div>
+  </form>
+</div>
+
+<%- include('../partials/bottom') %>

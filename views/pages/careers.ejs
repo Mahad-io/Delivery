@@ -1,0 +1,102 @@
+<%- include('../partials/top') %>
+
+<div class="wrap">
+  <div class="page-head">
+    <h1>Career and progression</h1>
+    <p class="lede">
+      What the next level actually asks of you, which certifications are worth the money,
+      how to find out what the job pays, and where the useful communities are.
+    </p>
+  </div>
+
+  <div class="grid grid--3 mb-6">
+    <div class="card card--brand">
+      <h2 class="mt-0" style="font-size:1.125rem">Competency framework</h2>
+      <p>Eight competencies, five levels, described in terms of what you can be observed doing.</p>
+      <div class="card__foot"><a class="btn btn--small" href="/careers/competencies">Open the framework</a></div>
+    </div>
+    <div class="card">
+      <h2 class="mt-0" style="font-size:1.125rem">Interview question bank</h2>
+      <p>Questions you will be asked, what the interviewer is listening for, and the questions you should be asking them.</p>
+      <div class="card__foot"><a class="btn btn--small" href="/careers/interviews">Open the bank</a></div>
+    </div>
+    <div class="card">
+      <h2 class="mt-0" style="font-size:1.125rem">Self-assessment</h2>
+      <p>Score your team's delivery maturity and get specific next steps per dimension.</p>
+      <div class="card__foot"><a class="btn btn--small" href="/tools/assessment">Take the assessment</a></div>
+    </div>
+  </div>
+
+  <section class="section">
+    <h2 class="mt-0">Certifications, honestly assessed</h2>
+    <p class="lede prose">
+      No affiliate links, no sponsored placements. We are not accredited by any of these bodies
+      and we do not want to be.
+    </p>
+
+    <div class="stack mt-4">
+      <% CERTIFICATIONS.forEach(function (c) { %>
+        <article class="card">
+          <h3 style="margin-top:0">
+            <% if (c.site) { %><a href="<%= c.site %>" rel="nofollow noopener"><%= c.name %></a><% } else { %><%= c.name %><% } %>
+          </h3>
+          <dl class="dl-grid">
+            <dt>Body</dt><dd><%= c.body %></dd>
+            <dt>Cost</dt><dd><%= c.cost %></dd>
+            <dt>Effort</dt><dd><%= c.effort %></dd>
+            <dt>Worth it?</dt><dd><%= c.worthIt %></dd>
+            <dt>Watch out</dt><dd><%= c.caution %></dd>
+          </dl>
+        </article>
+      <% }) %>
+    </div>
+  </section>
+
+  <section class="section section--tint" style="margin: 0 -24px; padding-left:24px; padding-right:24px">
+    <h2 class="mt-0">What does it pay?</h2>
+    <p class="prose"><%= PAY_GUIDANCE.intro %></p>
+    <div class="grid grid--2">
+      <div>
+        <h3>How to find out what is true this month</h3>
+        <ol>
+          <% PAY_GUIDANCE.steps.forEach(function (s) { %><li><%= s %></li><% }) %>
+        </ol>
+      </div>
+      <div>
+        <h3>Negotiating</h3>
+        <ul>
+          <% PAY_GUIDANCE.negotiating.forEach(function (s) { %><li><%= s %></li><% }) %>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="mt-0">Communities worth your time</h2>
+    <div class="grid grid--2">
+      <% COMMUNITIES.forEach(function (c) { %>
+        <div class="panel">
+          <h3 class="mt-0" style="font-size:1.0625rem">
+            <% if (c.site) { %><a href="<%= c.site %>" rel="nofollow noopener"><%= c.name %></a><% } else { %><%= c.name %><% } %>
+          </h3>
+          <p class="mb-0"><%= c.note %></p>
+        </div>
+      <% }) %>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="mt-0">Ten books, and why each one</h2>
+    <ol class="list-spaced prose">
+      <% READING.forEach(function (b) { %>
+        <li><strong><%= b.title %></strong> &mdash; <%= b.author %>. <%= b.why %></li>
+      <% }) %>
+    </ol>
+    <p class="caption">
+      Titles and authors only &mdash; buy them wherever you like, or ask your employer to.
+      We take no commission from anything on this page.
+    </p>
+  </section>
+</div>
+
+<%- include('../partials/bottom') %>

@@ -1,0 +1,31 @@
+<% if (!consent) { %>
+<div class="cookie-banner" role="region" aria-label="Cookies on this site">
+  <div class="wrap">
+    <h2>Cookies on <%= config.siteName %></h2>
+    <p>
+      We use one strictly necessary cookie to keep you signed in and protect forms.
+      We would also like to count page views and template downloads so we know what to
+      improve, and to email you when new material is published. Both of those are optional.
+    </p>
+    <p class="caption">
+      No third-party trackers, no advertising cookies, no data sold or shared.
+      Read the <a href="/legal/cookies">cookie policy</a>.
+    </p>
+    <div class="btn-row">
+      <form method="post" action="/consent">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="next" value="<%= currentPath %>">
+        <input type="hidden" name="decision" value="accept-all">
+        <button class="btn" type="submit">Accept optional cookies</button>
+      </form>
+      <form method="post" action="/consent">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="next" value="<%= currentPath %>">
+        <input type="hidden" name="decision" value="reject">
+        <button class="btn" type="submit">Reject optional cookies</button>
+      </form>
+      <a class="btn btn--secondary" href="/cookies">Choose individually</a>
+    </div>
+  </div>
+</div>
+<% } %>

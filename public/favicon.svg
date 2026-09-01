@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Delivery Hub">
+  <rect width="64" height="64" rx="12" fill="#073c3c"/>
+  <rect x="12" y="14" width="16" height="8" rx="2" fill="#ffd94a"/>
+  <rect x="12" y="28" width="28" height="8" rx="2" fill="#5fd0c4"/>
+  <rect x="12" y="42" width="40" height="8" rx="2" fill="#ffffff"/>
+</svg>

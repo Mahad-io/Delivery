@@ -1,0 +1,39 @@
+<%- include('../partials/top') %>
+
+<div class="wrap wrap--narrow">
+  <% if (sent) { %>
+    <div class="page-head">
+      <h1>Check your email</h1>
+      <p class="lede">
+        If an account exists for <strong><%= values.email %></strong>, we have sent a reset link to it.
+        The link expires in one hour and can be used once.
+      </p>
+    </div>
+    <div class="inset">
+      <p class="mb-0">
+        We deliberately do not tell you whether an account exists for that address.
+        Confirming it would let anyone check who has an account here.
+      </p>
+    </div>
+    <p class="mt-6"><a href="/signin">Back to sign in</a></p>
+  <% } else { %>
+    <div class="page-head">
+      <h1>Reset your password</h1>
+      <p class="lede">Enter the email address you signed up with and we will send you a link.</p>
+    </div>
+
+    <%- include('../partials/error-summary') %>
+
+    <form method="post" action="/forgot" novalidate>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" value="<%= values.email || '' %>" autocomplete="username" spellcheck="false">
+      </div>
+      <button class="btn" type="submit">Send reset link</button>
+    </form>
+    <p class="mt-6"><a href="/signin">Back to sign in</a></p>
+  <% } %>
+</div>
+
+<%- include('../partials/bottom') %>

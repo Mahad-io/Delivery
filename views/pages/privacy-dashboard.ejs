@@ -1,0 +1,148 @@
+<%- include('../partials/top') %>
+
+<div class="wrap">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <ol><li><a href="/">Home</a></li><li><a href="/account">Your account</a></li><li>Your data and privacy</li></ol>
+  </nav>
+
+  <div class="page-head">
+    <h1>Your data and privacy</h1>
+    <p class="lede">
+      Everything we hold about you, what it is for, and how to take it away or make it stop.
+      No forms, no waiting, no support ticket.
+    </p>
+  </div>
+
+  <div class="grid grid--sidebar">
+    <div>
+      <section class="mb-6">
+        <h2 class="mt-0">What we hold</h2>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Data we hold">
+          <table>
+            <thead><tr><th scope="col">Category</th><th scope="col">Records</th><th scope="col">Why we have it</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Account</th><td>1</td><td>Contract &mdash; we cannot give you an account without it</td></tr>
+              <tr><th scope="row">Optional profile fields</th><td><%= [account.job_role, account.organisation, account.experience_level].filter(Boolean).length %> of 3 filled in</td><td>Consent &mdash; clear them any time on your <a href="/account">account page</a></td></tr>
+              <tr><th scope="row">Download history</th><td><%= counts.downloads %></td><td>Contract, so you can see your own history</td></tr>
+              <tr><th scope="row">Saved templates</th><td><%= counts.saved %></td><td>Contract</td></tr>
+              <tr><th scope="row">Learning progress</th><td><%= counts.progress %></td><td>Contract</td></tr>
+              <tr><th scope="row">Assessment results</th><td><%= counts.assessments %></td><td>Contract</td></tr>
+              <tr><th scope="row">Retro boards</th><td><%= counts.boards %></td><td>Contract. Private to you; never shared or published</td></tr>
+              <tr><th scope="row">Security and activity log</th><td><%= counts.audit %></td><td>Legitimate interests &mdash; see <a href="/governance/ropa#legitimate-interests-assessments">LIA-02</a>. Deleted after <%= config.retention.auditLogDays %> days</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="caption">
+          We hold no payment data, no special category data, and no raw IP addresses anywhere.
+        </p>
+      </section>
+
+      <section class="mb-6">
+        <h2>Your consent preferences</h2>
+        <form method="post" action="/account/consents">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <div class="checkbox">
+            <input type="checkbox" id="analytics_consent" name="analytics_consent" value="yes" <%= account.analytics_consent ? 'checked' : '' %>>
+            <label for="analytics_consent">
+              Count my page views and downloads
+              <span class="hint">Aggregated only, first-party, no third parties involved. Helps us know what to improve.</span>
+            </label>
+          </div>
+          <div class="checkbox">
+            <input type="checkbox" id="marketing_consent" name="marketing_consent" value="yes" <%= account.marketing_consent ? 'checked' : '' %>>
+            <label for="marketing_consent">
+              Email me when new material is published
+              <span class="hint">One a month at most. Withdraw here or from any email.</span>
+            </label>
+          </div>
+          <button class="btn mt-4" type="submit">Save preferences</button>
+        </form>
+      </section>
+
+      <section class="mb-6">
+        <h2>Your consent history</h2>
+        <p>
+          Append-only, because Article 7(1) requires us to be able to evidence a consent
+          decision after the fact. We record changes rather than overwriting the old answer.
+        </p>
+        <% if (!consents.length) { %>
+          <p>No consent events recorded yet.</p>
+        <% } else { %>
+          <div class="table-scroll" tabindex="0" role="region" aria-label="Consent history">
+            <table>
+              <thead><tr><th scope="col">When</th><th scope="col">Purpose</th><th scope="col">Decision</th><th scope="col">How you were asked</th><th scope="col">Policy version</th></tr></thead>
+              <tbody>
+                <% consents.forEach(function (c) { %>
+                  <tr>
+                    <td><%= c.created_at %></td>
+                    <td><%= c.purpose %></td>
+                    <td><span class="tag <%= c.granted ? 'tag--green' : '' %>"><%= c.granted ? 'Granted' : 'Refused' %></span></td>
+                    <td><%= c.mechanism %></td>
+                    <td><%= c.policy_version || '&mdash;' %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </section>
+
+      <section>
+        <h2>Exercise your rights</h2>
+        <div class="grid grid--2">
+          <div class="panel">
+            <h3 class="mt-0" style="font-size:1.0625rem">Access and portability</h3>
+            <p>Articles 15 and 20. Instant, no request needed.</p>
+            <div class="btn-row">
+              <a class="btn btn--small" href="/account/data.json">JSON</a>
+              <a class="btn btn--small btn--secondary" href="/account/data.txt">Plain text</a>
+            </div>
+          </div>
+          <div class="panel">
+            <h3 class="mt-0" style="font-size:1.0625rem">Rectification</h3>
+            <p>Article 16. Change your details yourself on your <a href="/account">account page</a>.</p>
+          </div>
+          <div class="panel">
+            <h3 class="mt-0" style="font-size:1.0625rem">Erasure</h3>
+            <p>Article 17. Immediate, permanent, self-service.</p>
+            <a class="btn btn--small btn--secondary" href="/account/delete">Delete your account</a>
+          </div>
+          <div class="panel">
+            <h3 class="mt-0" style="font-size:1.0625rem">Restriction, objection, complaint</h3>
+            <p>Articles 18 and 21. These need a human, so we respond within one month.</p>
+            <a class="btn btn--small btn--secondary" href="/account/requests">Make a request</a>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <aside aria-labelledby="privacy-side">
+      <div class="panel panel--brand">
+        <h2 id="privacy-side" class="mt-0" style="font-size:1.0625rem">Our paperwork, published</h2>
+        <ul class="list-plain list-spaced">
+          <li><a href="/legal/privacy">Privacy notice</a></li>
+          <li><a href="/governance/ropa">Record of Processing Activities</a></li>
+          <li><a href="/governance/dpia">Impact assessment (DPIA)</a></li>
+          <li><a href="/governance/retention">Retention schedule</a></li>
+          <li><a href="/governance/subject-rights">Rights procedure</a></li>
+          <li><a href="/governance/breach">Breach response plan</a></li>
+          <li><a href="/governance/subprocessors">Sub-processors</a></li>
+        </ul>
+        <p class="caption mb-0">
+          Most organisations keep these internal. Publishing them is the cheapest way to be
+          held to them.
+        </p>
+      </div>
+      <div class="panel mt-4">
+        <h2 class="mt-0" style="font-size:1.0625rem">Complain</h2>
+        <p>Tell us first: <a href="mailto:<%= config.org.dpoEmail %>"><%= config.org.dpoEmail %></a>.</p>
+        <p class="mb-0">
+          You can also complain to the Information Commissioner's Office at any time, and doing
+          so does not affect your other rights.
+        </p>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<%- include('../partials/bottom') %>

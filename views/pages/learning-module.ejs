@@ -1,0 +1,125 @@
+<%- include('../partials/top') %>
+
+<div class="wrap">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <ol>
+      <li><a href="/">Home</a></li>
+      <li><a href="/learning">Learning</a></li>
+      <li><a href="/learning/<%= path.id %>"><%= path.title %></a></li>
+      <li><%= mod.title %></li>
+    </ol>
+  </nav>
+
+  <div class="grid grid--sidebar">
+    <div>
+      <div class="page-head" style="padding-top:0">
+        <span class="eyebrow">Module <%= index + 1 %> of <%= path.modules.length %> &middot; <%= mod.minutes %> minutes</span>
+        <h1><%= mod.title %></h1>
+      </div>
+
+      <div class="panel panel--brand">
+        <h2 class="mt-0" style="font-size:1.0625rem">By the end of this module you will be able to</h2>
+        <ul class="mb-0">
+          <% mod.objectives.forEach(function (o) { %><li><%= o %></li><% }) %>
+        </ul>
+      </div>
+
+      <div class="prose mt-6">
+        <% mod.content.forEach(function (p) { %><p><%= p %></p><% }) %>
+      </div>
+
+      <h2>Practice this week</h2>
+      <div class="inset inset--brand">
+        <p class="mb-0"><%= mod.practice %></p>
+      </div>
+
+      <% if (mod.quiz && mod.quiz.length) { %>
+        <h2>Check yourself</h2>
+        <% mod.quiz.forEach(function (item, qi) { %>
+          <div class="panel" data-quiz>
+            <p><strong><%= item.q %></strong></p>
+            <ul class="list-plain">
+              <% item.options.forEach(function (opt, oi) { %>
+                <li class="radio">
+                  <input type="radio" id="q<%= qi %>-<%= oi %>" name="quiz-<%= qi %>"
+                         data-correct="<%= oi === item.answer %>">
+                  <label for="q<%= qi %>-<%= oi %>"><%= opt %></label>
+                </li>
+              <% }) %>
+            </ul>
+            <div data-quiz-feedback role="status" aria-live="polite"></div>
+            <details>
+              <summary>Show the answer and why</summary>
+              <p><strong><%= item.options[item.answer] %></strong></p>
+              <p class="mb-0"><%= item.why %></p>
+            </details>
+          </div>
+        <% }) %>
+      <% } %>
+
+      <% if (mod.resources && mod.resources.length) { %>
+        <h2>Templates that go with this</h2>
+        <div class="grid grid--2">
+          <% mod.resources.map(resourceFor).filter(Boolean).forEach(function (resource) { %>
+            <%- include('../partials/resource-card', { resource: resource }) %>
+          <% }) %>
+        </div>
+      <% } %>
+
+      <hr>
+
+      <form method="post" action="/learning/<%= path.id %>/<%= mod.id %>/complete">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="btn-row">
+          <% if (completed.has(mod.id)) { %>
+            <span class="badge badge--earned">Marked complete</span>
+            <button class="btn btn--small btn--secondary" type="submit" name="undo" value="1">Mark as not complete</button>
+          <% } else { %>
+            <button class="btn" type="submit">
+              <%= next ? 'Mark complete and continue' : 'Mark complete' %>
+            </button>
+          <% } %>
+          <% if (next) { %>
+            <a class="btn btn--secondary" href="/learning/<%= path.id %>/<%= next.id %>">Skip to next module</a>
+          <% } %>
+        </div>
+        <% if (!user) { %>
+          <p class="caption mt-4">Marking modules complete needs a free account &mdash; we will ask when you click.</p>
+        <% } %>
+      </form>
+
+      <nav class="mt-6" aria-label="Module navigation">
+        <div class="btn-row">
+          <% if (prev) { %><a href="/learning/<%= path.id %>/<%= prev.id %>">&larr; <%= prev.title %></a><% } %>
+          <% if (next) { %><a href="/learning/<%= path.id %>/<%= next.id %>"><%= next.title %> &rarr;</a><% } %>
+        </div>
+      </nav>
+    </div>
+
+    <aside aria-labelledby="path-nav-heading">
+      <div class="panel">
+        <h2 id="path-nav-heading" class="mt-0" style="font-size:1.0625rem"><%= path.title %></h2>
+        <div class="progress mb-4">
+          <div class="progress__track">
+            <div class="progress__fill <%= progress.percent === 100 ? 'progress__fill--full' : '' %>" style="width: <%= progress.percent %>%"></div>
+          </div>
+          <span class="progress__label"><%= progress.done %>/<%= progress.of %></span>
+        </div>
+        <ol class="list-plain">
+          <% path.modules.forEach(function (m, i) { %>
+            <li style="margin-bottom:8px">
+              <% if (m.id === mod.id) { %>
+                <strong><%= i + 1 %>. <%= m.title %></strong>
+              <% } else { %>
+                <a href="/learning/<%= path.id %>/<%= m.id %>"><%= i + 1 %>. <%= m.title %></a>
+              <% } %>
+              <% if (completed.has(m.id)) { %> <span class="tag tag--green">done</span><% } %>
+            </li>
+          <% }) %>
+        </ol>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<%- include('../partials/bottom') %>

@@ -1,0 +1,21 @@
+<%- include('../partials/top') %>
+
+<div class="wrap wrap--narrow">
+  <div class="page-head">
+    <h1>Confirm your email address</h1>
+    <p class="lede">
+      We sent a confirmation link to <strong><%= user.email %></strong>.
+      This feature stays locked until you use it.
+    </p>
+  </div>
+  <form method="post" action="/verify/resend">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <button class="btn" type="submit">Send the link again</button>
+  </form>
+  <p class="mt-6">
+    Wrong address, or never arrived? Email
+    <a href="mailto:<%= config.org.supportEmail %>"><%= config.org.supportEmail %></a> and we will sort it.
+  </p>
+</div>
+
+<%- include('../partials/bottom') %>

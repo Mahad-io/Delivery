@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en-GB" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %><%= title === config.siteName || String(title).indexOf(config.siteName) === 0 ? '' : ' - ' + config.siteName %></title>
+  <meta name="description" content="<%= typeof description !== 'undefined' ? description : config.tagline %>">
+  <meta name="theme-color" content="#073c3c">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <div class="site-header__top">
+        <a class="brand" href="/">
+          <span class="brand__mark" aria-hidden="true">DH</span>
+          <span><%= config.siteName %></span>
+        </a>
+        <div class="header-actions">
+          <% if (user) { %>
+            <a href="/account">Your account</a>
+            <form method="post" action="/signout">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <button class="btn btn--small btn--secondary" type="submit">Sign out</button>
+            </form>
+          <% } else { %>
+            <a href="/signin">Sign in</a>
+            <a class="btn btn--small btn--accent" href="/signup">Create free account</a>
+          <% } %>
+        </div>
+      </div>
+      <nav class="site-header__nav" aria-label="Main">
+        <div class="site-nav">
+          <ul>
+            <li><a href="/toolkit" <%= currentPath.indexOf('/toolkit') === 0 || currentPath.indexOf('/resources') === 0 ? 'aria-current="page"' : '' %>>Toolkit</a></li>
+            <li><a href="/learning" <%= currentPath.indexOf('/learning') === 0 ? 'aria-current="page"' : '' %>>Learning</a></li>
+            <li><a href="/tools" <%= currentPath.indexOf('/tools') === 0 ? 'aria-current="page"' : '' %>>Tools</a></li>
+            <li><a href="/careers" <%= currentPath.indexOf('/careers') === 0 ? 'aria-current="page"' : '' %>>Careers</a></li>
+            <li><a href="/glossary" <%= currentPath.indexOf('/glossary') === 0 ? 'aria-current="page"' : '' %>>Glossary</a></li>
+            <li><a href="/legal" <%= currentPath.indexOf('/legal') === 0 || currentPath.indexOf('/governance') === 0 ? 'aria-current="page"' : '' %>>Privacy &amp; legal</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <%- include('cookie-banner') %>
+
+  <main id="main">
+    <% if (flash) { %>
+      <div class="wrap">
+        <div class="notice notice--<%= flash.kind === 'success' ? 'success' : flash.kind === 'error' ? 'error' : 'warn' %>" role="status" style="margin-top:24px">
+          <h2><%= flash.title %></h2>
+          <% if (flash.message) { %><p><%= flash.message %></p><% } %>
+        </div>
+      </div>
+    <% } %>

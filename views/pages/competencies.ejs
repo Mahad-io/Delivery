@@ -1,0 +1,60 @@
+<%- include('../partials/top') %>
+
+<div class="wrap">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <ol><li><a href="/">Home</a></li><li><a href="/careers">Careers</a></li><li>Competency framework</li></ol>
+  </nav>
+
+  <div class="page-head">
+    <h1>Delivery competency framework</h1>
+    <p class="lede">
+      Eight competencies across five levels. Every descriptor is behavioural: something you
+      could be observed doing, not something you could claim to value.
+    </p>
+    <div class="inset inset--brand">
+      <p class="mb-0">
+        <strong>How to use it.</strong> Place yourself honestly at each level, then pick the two
+        competencies where moving up would most change your work. Bring the evidence gap to your
+        next one-to-one. Do not try to move all eight.
+      </p>
+    </div>
+  </div>
+
+  <% competencies.forEach(function (c) { %>
+    <section class="mb-6">
+      <h2 id="<%= c.id %>"><%= c.name %></h2>
+      <p class="lede"><%= c.description %></p>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="<%= c.name %> levels - scrollable">
+        <table>
+          <caption class="visually-hidden"><%= c.name %> by level</caption>
+          <thead>
+            <tr><th scope="col">Level</th><th scope="col">What it looks like</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Associate</th><td><%= c.levels.associate %></td></tr>
+            <tr><th scope="row">Practitioner</th><td><%= c.levels.practitioner %></td></tr>
+            <tr><th scope="row">Senior</th><td><%= c.levels.senior %></td></tr>
+            <tr><th scope="row">Lead</th><td><%= c.levels.lead %></td></tr>
+            <tr><th scope="row">Head of</th><td><%= c.levels.head %></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  <% }) %>
+
+  <div class="panel">
+    <h2 class="mt-0">A note on frameworks</h2>
+    <p>
+      This is our framework, and it is deliberately shorter than most. If you work in UK
+      government or a supplier to it, read the DDaT delivery manager capability framework as well
+      &mdash; it is the clearest published description of the role at each level anywhere, it is
+      free, and the language will be recognised in interviews.
+    </p>
+    <p class="mb-0">
+      Released under <a href="/legal/licence">CC BY 4.0</a>. Adapt it for your organisation;
+      that is what it is for.
+    </p>
+  </div>
+</div>
+
+<%- include('../partials/bottom') %>

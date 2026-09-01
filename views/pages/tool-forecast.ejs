@@ -1,0 +1,174 @@
+<%- include('../partials/top') %>
+
+<div class="wrap">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <ol><li><a href="/">Home</a></li><li><a href="/tools">Tools</a></li><li>Forecasting and flow</li></ol>
+  </nav>
+
+  <div class="page-head">
+    <h1>Forecasting and flow calculators</h1>
+    <p class="lede">
+      Four calculators. Everything happens in this page &mdash; no numbers are sent anywhere.
+    </p>
+  </div>
+
+  <noscript>
+    <div class="notice notice--warn">
+      <h2>These calculators need JavaScript</h2>
+      <p>
+        They are deliberately client-side so your delivery data never leaves your device, which
+        means they cannot work without JavaScript. The formulas are all written out below, so you
+        can do them in a spreadsheet instead &mdash; and the
+        <a href="/resources/velocity-capacity-tracker">capacity tracker</a> and
+        <a href="/resources/cycle-time-worksheet">cycle time worksheet</a> downloads do the same job.
+      </p>
+    </div>
+  </noscript>
+
+  <!-- 1. Monte Carlo -->
+  <section class="mb-6">
+    <h2>1. Monte Carlo delivery forecast</h2>
+    <p class="prose">
+      Enter your weekly completed-item counts for the last 8 to 12 weeks and how many items
+      remain. We simulate 10,000 possible futures by sampling from your own history, and read
+      the percentiles off the result. This is a far better answer to &ldquo;when will it be
+      done?&rdquo; than dividing scope by an average.
+    </p>
+    <div class="panel">
+      <div class="form-group">
+        <label for="mc-history">Items completed per week</label>
+        <span class="hint" id="mc-history-hint">Comma or space separated, oldest first. At least 5 values; 8 to 12 is better.</span>
+        <input type="text" id="mc-history" value="11 13 9 14 12 10 15 12" aria-describedby="mc-history-hint" inputmode="numeric">
+      </div>
+      <div class="form-group">
+        <label for="mc-remaining">Items remaining</label>
+        <input type="number" id="mc-remaining" value="48" min="1" max="5000" style="max-width:10rem">
+      </div>
+      <div class="form-group">
+        <label for="mc-start">Start date</label>
+        <input type="text" id="mc-start" placeholder="YYYY-MM-DD" style="max-width:14rem">
+      </div>
+      <button class="btn" type="button" data-mc-run>Run 10,000 simulations</button>
+      <div id="mc-result" role="status" aria-live="polite" class="mt-4"></div>
+    </div>
+    <div class="inset inset--brand">
+      <p class="mb-0">
+        <strong>How to use the output.</strong> Quote the 85th percentile for anything someone
+        else will spend money against. Quote the 50th in conversation, and say which is which.
+        Never quote a single date without a confidence level attached.
+      </p>
+    </div>
+  </section>
+
+  <!-- 2. Little's Law -->
+  <section class="mb-6">
+    <h2>2. Little's Law</h2>
+    <p class="prose">
+      Average cycle time = average work in progress &divide; average throughput. It is arithmetic,
+      it holds regardless of methodology, and it is the entire argument for WIP limits.
+    </p>
+    <div class="panel">
+      <div class="grid grid--2">
+        <div class="form-group">
+          <label for="ll-wip">Items currently in progress</label>
+          <input type="number" id="ll-wip" value="18" min="1" step="1">
+        </div>
+        <div class="form-group">
+          <label for="ll-throughput">Items completed per week</label>
+          <input type="number" id="ll-throughput" value="12" min="0.1" step="0.1">
+        </div>
+      </div>
+      <button class="btn" type="button" data-ll-run>Calculate</button>
+      <div id="ll-result" role="status" aria-live="polite" class="mt-4"></div>
+    </div>
+  </section>
+
+  <!-- 3. Flow efficiency -->
+  <section class="mb-6">
+    <h2>3. Flow efficiency</h2>
+    <p class="prose">
+      Touch time &divide; total elapsed time. Most teams land between 15% and 40%. If yours is
+      low, your constraint is queues and handoffs &mdash; and effort-based interventions cannot
+      help you.
+    </p>
+    <div class="panel">
+      <div class="grid grid--3">
+        <div class="form-group">
+          <label for="fe-elapsed">Elapsed days, start to finish</label>
+          <input type="number" id="fe-elapsed" value="14" min="0.5" step="0.5">
+        </div>
+        <div class="form-group">
+          <label for="fe-blocked">Days blocked</label>
+          <input type="number" id="fe-blocked" value="5" min="0" step="0.5">
+        </div>
+        <div class="form-group">
+          <label for="fe-waiting">Days waiting in a queue</label>
+          <input type="number" id="fe-waiting" value="4" min="0" step="0.5">
+        </div>
+      </div>
+      <button class="btn" type="button" data-fe-run>Calculate</button>
+      <div id="fe-result" role="status" aria-live="polite" class="mt-4"></div>
+    </div>
+  </section>
+
+  <!-- 4. Capacity -->
+  <section class="mb-6">
+    <h2>4. Sprint capacity</h2>
+    <p class="prose">
+      Plan the team you actually have. Most missed sprints are a capacity assumption failure,
+      not a speed failure.
+    </p>
+    <div class="panel">
+      <div class="grid grid--2">
+        <div class="form-group">
+          <label for="cap-people">Team members</label>
+          <input type="number" id="cap-people" value="8" min="1" step="1">
+        </div>
+        <div class="form-group">
+          <label for="cap-days">Working days in the sprint</label>
+          <input type="number" id="cap-days" value="10" min="1" step="1">
+        </div>
+        <div class="form-group">
+          <label for="cap-leave">Leave (person-days)</label>
+          <input type="number" id="cap-leave" value="6" min="0" step="0.5">
+        </div>
+        <div class="form-group">
+          <label for="cap-oncall">On-call and support (person-days)</label>
+          <input type="number" id="cap-oncall" value="8" min="0" step="0.5">
+        </div>
+        <div class="form-group">
+          <label for="cap-other">Interviews, training, other (person-days)</label>
+          <input type="number" id="cap-other" value="3" min="0" step="0.5">
+        </div>
+        <div class="form-group">
+          <label for="cap-unplanned">Historic unplanned work (%)</label>
+          <span class="hint" id="cap-unplanned-hint">From your own last six sprints, not a guess.</span>
+          <input type="number" id="cap-unplanned" value="15" min="0" max="90" step="1" aria-describedby="cap-unplanned-hint">
+        </div>
+      </div>
+      <button class="btn" type="button" data-cap-run>Calculate</button>
+      <div id="cap-result" role="status" aria-live="polite" class="mt-4"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="mt-0">The formulas, if you would rather use a spreadsheet</h2>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Formulas">
+      <table>
+        <thead><tr><th scope="col">Measure</th><th scope="col">Formula</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Cycle time</th><td>delivered date &minus; started date</td></tr>
+          <tr><th scope="row">Lead time</th><td>delivered date &minus; requested date</td></tr>
+          <tr><th scope="row">Touch time</th><td>cycle time &minus; blocked days &minus; waiting days</td></tr>
+          <tr><th scope="row">Flow efficiency</th><td>touch time &divide; cycle time</td></tr>
+          <tr><th scope="row">Little's Law</th><td>average cycle time = average WIP &divide; average throughput</td></tr>
+          <tr><th scope="row">Net capacity</th><td>(people &times; sprint days) &minus; leave &minus; on-call &minus; other, then &times; (1 &minus; unplanned %)</td></tr>
+          <tr><th scope="row">Monte Carlo</th><td>sample weekly throughput at random with replacement, accumulate until remaining items are covered, record weeks taken, repeat 10,000 times, read percentiles</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><a href="/resources/flow-metrics-starter">Read the flow metrics starter pack</a> for what to do with these numbers once you have them.</p>
+  </section>
+</div>
+
+<%- include('../partials/bottom', { scripts: ['calculators'] }) %>

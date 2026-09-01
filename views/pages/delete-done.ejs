@@ -1,0 +1,29 @@
+<%- include('../partials/top') %>
+
+<div class="wrap wrap--narrow">
+  <div class="page-head">
+    <h1>Your account has been deleted</h1>
+    <p class="lede">
+      Done, permanently. We have sent a confirmation email setting out exactly what was deleted
+      and the two things we kept as evidence that we honoured the request.
+    </p>
+  </div>
+
+  <div class="panel">
+    <p>
+      Everything on this site is still free to read without an account &mdash; every template,
+      every learning module, the whole glossary. You just cannot download or save without one.
+    </p>
+    <p class="mb-0">
+      If you left because something here was not good enough, we would like to know:
+      <a href="mailto:<%= config.org.supportEmail %>"><%= config.org.supportEmail %></a>.
+    </p>
+  </div>
+
+  <div class="btn-row mt-6">
+    <a class="btn" href="/">Back to the home page</a>
+    <a class="btn btn--secondary" href="/toolkit">Browse the toolkit</a>
+  </div>
+</div>
+
+<%- include('../partials/bottom') %>

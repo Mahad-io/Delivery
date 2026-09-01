@@ -1,0 +1,53 @@
+<%- include('../partials/top') %>
+
+<div class="wrap">
+  <div class="page-head">
+    <h1>Legal, privacy and governance</h1>
+    <p class="lede">
+      All of it, published. Most organisations keep the second group internal &mdash; the record
+      of processing, the impact assessment, the retention schedule, the breach plan. Publishing
+      them is the cheapest possible way to be held to them.
+    </p>
+  </div>
+
+  <section class="mb-6">
+    <h2 class="mt-0">Policies</h2>
+    <div class="grid grid--2">
+      <% Object.keys(pages).forEach(function (slug) { %>
+        <article class="card card--link">
+          <h3 style="margin-top:0;font-size:1.125rem"><a href="/legal/<%= slug %>"><%= pages[slug].title %></a></h3>
+          <p class="caption mb-0">Version <%= pages[slug].version %></p>
+        </article>
+      <% }) %>
+    </div>
+  </section>
+
+  <section class="mb-6">
+    <h2>Governance documents</h2>
+    <div class="grid grid--2">
+      <% Object.keys(governance).forEach(function (slug) { %>
+        <article class="card card--link card--tinted">
+          <h3 style="margin-top:0;font-size:1.125rem"><a href="/governance/<%= slug %>"><%= governance[slug].title %></a></h3>
+        </article>
+      <% }) %>
+    </div>
+  </section>
+
+  <div class="panel panel--brand">
+    <h2 class="mt-0">In short</h2>
+    <ul>
+      <li>You can read everything here without an account and without giving us any data.</li>
+      <li>An account needs a name, an email and a password. Everything else is optional.</li>
+      <li>We do not store IP addresses, use third-party trackers, or run advertising.</li>
+      <li>We do not sell or share your data with anyone, for any purpose.</li>
+      <li>You can export everything or delete your account yourself, instantly, with no form.</li>
+      <li>All the material is <a href="/legal/licence">CC BY 4.0</a> &mdash; use it commercially, just credit us.</li>
+    </ul>
+    <p class="mb-0">
+      Questions about your data: <a href="mailto:<%= config.org.dpoEmail %>"><%= config.org.dpoEmail %></a>.
+      Everything else: <a href="mailto:<%= config.org.supportEmail %>"><%= config.org.supportEmail %></a>.
+    </p>
+  </div>
+</div>
+
+<%- include('../partials/bottom') %>

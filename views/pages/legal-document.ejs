@@ -1,0 +1,33 @@
+<%- include('../partials/top') %>
+
+<div class="wrap">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <ol>
+      <li><a href="/">Home</a></li>
+      <li><a href="/legal">Legal and governance</a></li>
+      <li><%= heading %></li>
+    </ol>
+  </nav>
+
+  <div class="page-head">
+    <span class="eyebrow"><%= isGovernance ? 'Governance document' : 'Policy' %></span>
+    <h1><%= heading %></h1>
+    <p class="caption">Version <%= version %>. Last reviewed <%= version %>.</p>
+  </div>
+
+  <div class="doc prose">
+    <%- html %>
+  </div>
+
+  <hr>
+  <div class="panel">
+    <h2 class="mt-0" style="font-size:1.0625rem">Questions about this document</h2>
+    <p class="mb-0">
+      Data protection: <a href="mailto:<%= config.org.dpoEmail %>"><%= config.org.dpoEmail %></a>.
+      Anything else: <a href="mailto:<%= config.org.supportEmail %>"><%= config.org.supportEmail %></a>.
+      Previous versions available on request.
+    </p>
+  </div>
+</div>
+
+<%- include('../partials/bottom') %>

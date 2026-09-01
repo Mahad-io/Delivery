@@ -1,0 +1,76 @@
+<%- include('../partials/top') %>
+
+<div class="wrap">
+  <div class="page-head">
+    <h1>Interactive tools</h1>
+    <p class="lede">
+      Six tools that run in the browser. The calculators send nothing to the server &mdash;
+      your delivery numbers stay on your device. The retro board and assessment save to your
+      account so you can come back to them.
+    </p>
+  </div>
+
+  <div class="grid grid--2">
+    <article class="card">
+      <span class="eyebrow">No account needed</span>
+      <h2 style="margin-top:0;font-size:1.25rem"><a href="/tools/forecast">Forecasting and flow calculators</a></h2>
+      <p>
+        Monte Carlo delivery forecast from your throughput history, Little's Law, flow efficiency,
+        and a capacity model that accounts for leave, on-call and support load.
+      </p>
+      <p class="caption">Runs entirely in your browser. Nothing is transmitted or stored.</p>
+      <div class="card__foot"><a class="btn btn--small" href="/tools/forecast">Open calculators</a></div>
+    </article>
+
+    <article class="card">
+      <span class="eyebrow">No account needed</span>
+      <h2 style="margin-top:0;font-size:1.25rem"><a href="/tools/assessment"><%= assessment.title %></a></h2>
+      <p>
+        24 behavioural statements across six dimensions. Scored server-side, with a specific next
+        step for each dimension and links to the templates that help.
+      </p>
+      <p class="caption">Results shown to everyone; saving history needs an account.</p>
+      <div class="card__foot"><a class="btn btn--small" href="/tools/assessment">Take the assessment</a></div>
+    </article>
+
+    <article class="card">
+      <span class="eyebrow">Account needed to save</span>
+      <h2 style="margin-top:0;font-size:1.25rem"><a href="/tools/retro">Retro board</a></h2>
+      <p>
+        <%= retroTemplates.length %> formats including Four Ls, Sailboat, Circles and Soup and a
+        pre-mortem. Add notes, vote, export to markdown with an actions table ready to fill in.
+      </p>
+      <p class="caption">Boards are private to your account and are never shared or published.</p>
+      <div class="card__foot"><a class="btn btn--small" href="/tools/retro">Open retro board</a></div>
+    </article>
+
+    <article class="card">
+      <span class="eyebrow">No account needed</span>
+      <h2 style="margin-top:0;font-size:1.25rem"><a href="/tools/poker">Estimation and planning poker</a></h2>
+      <p>
+        Four decks including a right-sizing deck that skips numbers entirely. Reveal-together
+        mode for a co-located team, plus the facilitation notes that make the session worth having.
+      </p>
+      <div class="card__foot"><a class="btn btn--small" href="/tools/poker">Open estimation tool</a></div>
+    </article>
+  </div>
+
+  <section class="section">
+    <h2 class="mt-0">A note on the calculators</h2>
+    <div class="panel panel--brand prose">
+      <p>
+        Throughput history, capacity figures and cycle times are commercially sensitive and often
+        politically sensitive too. So the calculators are written to do all their arithmetic in
+        the page: there is no form submission, no fetch, and no logging. You can check this &mdash;
+        open your browser's network tab and use them.
+      </p>
+      <p class="mb-0">
+        This also means the calculators need JavaScript, and they are the only part of the site
+        that does. Everything else &mdash; every template, every module, every form &mdash; works
+        with JavaScript switched off.
+      </p>
+    </div>
+  </section>
+</div>
+
+<%- include('../partials/bottom') %>

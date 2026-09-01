@@ -1,0 +1,62 @@
+<%- include('../partials/top') %>
+
+<div class="wrap">
+  <div class="page-head">
+    <h1>Learning paths</h1>
+    <p class="lede">
+      <%= moduleCount %> modules across five paths. Each one has learning objectives, short
+      teaching content, a practice task you can do this week, and links to the templates that
+      go with it. No videos, no gated webinars.
+    </p>
+    <% if (!user) { %>
+      <div class="inset inset--brand">
+        <p class="mb-0">
+          You can read every module without an account.
+          <a href="/signup?next=/learning">Create a free one</a> to keep your progress and pick up where you left off.
+        </p>
+      </div>
+    <% } %>
+  </div>
+
+  <div class="grid grid--2">
+    <% paths.forEach(function (p) { %>
+      <article class="card">
+        <span class="eyebrow"><%= p.modules.length %> modules &middot; about <%= p.hours %> hours</span>
+        <h2 style="margin-top:0"><a href="/learning/<%= p.id %>"><%= p.title %></a></h2>
+        <p><%= p.strapline %></p>
+        <p class="caption"><strong>Who it is for:</strong> <%= p.audience %></p>
+        <% if (user) { %>
+          <div class="progress">
+            <div class="progress__track">
+              <div class="progress__fill <%= p.progress.percent === 100 ? 'progress__fill--full' : '' %>" style="width: <%= p.progress.percent %>%"></div>
+            </div>
+            <span class="progress__label"><%= p.progress.percent %>%</span>
+          </div>
+        <% } %>
+        <div class="card__foot">
+          <a class="btn btn--small" href="/learning/<%= p.id %>"><%= user && p.progress.done > 0 ? 'Continue path' : 'Start path' %></a>
+        </div>
+      </article>
+    <% }) %>
+  </div>
+
+  <section class="section">
+    <h2>Not sure where to start?</h2>
+    <div class="grid grid--3">
+      <div class="panel">
+        <h3 class="mt-0">New to the role</h3>
+        <p>Start with <a href="/learning/new-dm">New delivery manager</a>, then take the <a href="/tools/assessment">maturity assessment</a> to find your weakest dimension.</p>
+      </div>
+      <div class="panel">
+        <h3 class="mt-0">Asked for dates you cannot give</h3>
+        <p>Go straight to <a href="/learning/metrics">Metrics, forecasting and evidence</a>. Two modules in you will have a better answer than you have now.</p>
+      </div>
+      <div class="panel">
+        <h3 class="mt-0">Stakeholders are the problem</h3>
+        <p>Take <a href="/learning/stakeholders">Stakeholders, influence and difficult conversations</a> and pair it with the <a href="/resources/stakeholder-map">stakeholder map</a>.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<%- include('../partials/bottom') %>

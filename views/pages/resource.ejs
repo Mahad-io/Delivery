@@ -1,0 +1,139 @@
+<%- include('../partials/top') %>
+
+<div class="wrap">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <ol>
+      <li><a href="/">Home</a></li>
+      <li><a href="/toolkit">Toolkit</a></li>
+      <li><a href="/toolkit?category=<%= resource.category %>"><%= category.name %></a></li>
+      <li><%= resource.title %></li>
+    </ol>
+  </nav>
+
+  <div class="grid grid--sidebar">
+    <div>
+      <div class="page-head" style="padding-top:0">
+        <span class="eyebrow"><%= category.name %> &middot; <%= resource.level === 'core' ? 'Core' : 'Intermediate' %> &middot; about <%= resource.minutes %> minutes to fill in</span>
+        <h1><%= resource.title %></h1>
+        <p class="lede"><%= resource.summary %></p>
+      </div>
+
+      <% if (resource.why) { %>
+        <div class="inset inset--brand">
+          <p class="mb-0"><strong>Why it matters.</strong> <%= resource.why %></p>
+        </div>
+      <% } %>
+
+      <div class="prose">
+        <% if (resource.doc && resource.doc.intro) { %>
+          <p><%= resource.doc.intro %></p>
+        <% } %>
+
+        <% (resource.doc && resource.doc.sections || []).forEach(function (s) { %>
+          <h2><%= s.heading %></h2>
+          <% (s.body || []).forEach(function (p) { %><p><%= p %></p><% }) %>
+          <% if (s.bullets && s.bullets.length) { %>
+            <ul>
+              <% s.bullets.forEach(function (b) { %><li><%= b %></li><% }) %>
+            </ul>
+          <% } %>
+        <% }) %>
+      </div>
+
+      <% if (resource.table) { %>
+        <h2>What is in the template</h2>
+        <p>
+          <%= resource.table.columns.length %> columns, with worked example rows you can delete.
+          <% if ((resource.formats || []).indexOf('csv') > -1) { %>
+            The CSV opens directly in Excel, Numbers or Google Sheets.
+          <% } %>
+        </p>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Template preview - scrollable">
+          <table class="table--fixed">
+            <caption class="visually-hidden"><%= resource.title %> template preview</caption>
+            <thead>
+              <tr><% resource.table.columns.forEach(function (c) { %><th scope="col"><%= c %></th><% }) %></tr>
+            </thead>
+            <tbody>
+              <% (resource.table.sampleRows || []).forEach(function (row) { %>
+                <tr><% resource.table.columns.forEach(function (c, i) { %><td><%= row[i] || '' %></td><% }) %></tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+        <p class="caption">
+          Wide table? The download is easier to work with than scrolling this preview.
+        </p>
+      <% } %>
+
+      <% if (resource.basedOn) { %>
+        <h2>Provenance</h2>
+        <p><strong>Based on:</strong> <%= resource.basedOn %></p>
+        <p class="caption">
+          Released under <a href="/legal/licence">CC BY 4.0</a>. Use it commercially, adapt it,
+          put it in a client deliverable &mdash; just credit us and say if you changed it.
+        </p>
+      <% } %>
+
+      <% if (relatedModules.length) { %>
+        <h2>Learn the thinking behind it</h2>
+        <ul class="list-spaced">
+          <% relatedModules.forEach(function (rm) { %>
+            <li>
+              <a href="/learning/<%= rm.path.id %>/<%= rm.module.id %>"><%= rm.module.title %></a>
+              <span class="caption">&mdash; <%= rm.path.title %>, <%= rm.module.minutes %> min</span>
+            </li>
+          <% }) %>
+        </ul>
+      <% } %>
+    </div>
+
+    <aside aria-labelledby="download-heading">
+      <div class="panel panel--brand">
+        <h2 id="download-heading" class="mt-0">Download</h2>
+        <div class="stack">
+          <% (resource.formats || []).forEach(function (f) { %>
+            <a class="btn btn--block" href="/download/<%= resource.id %>.<%= f %>">
+              <%= f === 'csv' ? 'Spreadsheet (CSV)' : 'Document (Markdown)' %>
+            </a>
+          <% }) %>
+        </div>
+        <% if (!user) { %>
+          <p class="caption mt-4" data-signup-note>
+            You will be asked to create a free account first &mdash; about twenty seconds.
+            <a href="/signup?next=/resources/<%= resource.id %>">Create one now</a>.
+          </p>
+        <% } %>
+
+        <form method="post" action="/resources/<%= resource.id %>/save" class="mt-4" data-save-form>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <button class="btn btn--small btn--secondary btn--block" type="submit" aria-pressed="<%= isSaved %>">
+            <%= isSaved ? 'Saved to your account' : 'Save for later' %>
+          </button>
+        </form>
+      </div>
+
+      <div class="panel mt-4">
+        <h2 class="mt-0" style="font-size:1rem">Topics</h2>
+        <ul class="tag-list">
+          <% (resource.tags || []).forEach(function (t) { %>
+            <li><a class="tag" href="/toolkit?tag=<%= encodeURIComponent(t) %>"><%= t %></a></li>
+          <% }) %>
+        </ul>
+      </div>
+
+      <% if (related.length) { %>
+        <div class="panel mt-4">
+          <h2 class="mt-0" style="font-size:1rem">Also in <%= category.name %></h2>
+          <ul class="list-plain list-spaced">
+            <% related.forEach(function (r) { %>
+              <li><a href="/resources/<%= r.id %>"><%= r.title %></a></li>
+            <% }) %>
+          </ul>
+        </div>
+      <% } %>
+    </aside>
+  </div>
+</div>
+
+<%- include('../partials/bottom') %>

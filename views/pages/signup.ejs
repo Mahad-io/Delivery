@@ -1,0 +1,150 @@
+<%- include('../partials/top') %>
+
+<div class="wrap">
+  <div class="grid grid--sidebar">
+    <div>
+      <div class="page-head">
+        <h1>Create your free account</h1>
+        <% if (intent) { %>
+          <div class="notice">
+            <h2>Almost there</h2>
+            <p>You need an account to <%= intent.reason %>. It takes about twenty seconds, it is free, and you can delete it yourself at any time.</p>
+          </div>
+        <% } else { %>
+          <p class="lede">Free, no card, no trial. You need one to download templates and keep your progress.</p>
+        <% } %>
+      </div>
+
+      <%- include('../partials/error-summary') %>
+
+      <form method="post" action="/signup" novalidate>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="next" value="<%= next %>">
+
+        <% function err(field) { return (errors || []).find(function (e) { return e.field === field; }); } %>
+
+        <div class="form-group <%= err('name') ? 'form-group--error' : '' %>">
+          <label for="name">Your name</label>
+          <span class="hint" id="name-hint">However you would like to be addressed. A first name is fine.</span>
+          <% if (err('name')) { %><span class="error-message" id="name-error"><span class="visually-hidden">Error:</span> <%= err('name').message %></span><% } %>
+          <input type="text" id="name" name="name" value="<%= values.name || '' %>"
+                 autocomplete="name" aria-describedby="name-hint <%= err('name') ? 'name-error' : '' %>"
+                 <%= err('name') ? 'aria-invalid="true"' : '' %>>
+        </div>
+
+        <div class="form-group <%= err('email') ? 'form-group--error' : '' %>">
+          <label for="email">Email address</label>
+          <span class="hint" id="email-hint">Used to sign in, confirm your account and reset a forgotten password. Nothing else without your consent.</span>
+          <% if (err('email')) { %><span class="error-message" id="email-error"><span class="visually-hidden">Error:</span> <%= err('email').message %></span><% } %>
+          <input type="email" id="email" name="email" value="<%= values.email || '' %>"
+                 autocomplete="email" spellcheck="false"
+                 aria-describedby="email-hint <%= err('email') ? 'email-error' : '' %>"
+                 <%= err('email') ? 'aria-invalid="true"' : '' %>>
+        </div>
+
+        <div class="form-group <%= err('password') ? 'form-group--error' : '' %>">
+          <label for="password">Password</label>
+          <span class="hint" id="password-hint">
+            At least 12 characters. Three random words is easier to remember and harder to guess
+            than a short password with symbols in it. You can paste into this field.
+          </span>
+          <% if (err('password')) { %><span class="error-message" id="password-error"><span class="visually-hidden">Error:</span> <%= err('password').message %></span><% } %>
+          <input type="password" id="password" name="password"
+                 autocomplete="new-password" minlength="12"
+                 aria-describedby="password-hint <%= err('password') ? 'password-error' : '' %>"
+                 <%= err('password') ? 'aria-invalid="true"' : '' %>>
+        </div>
+
+        <fieldset>
+          <legend>Optional &mdash; helps us know who we are writing for</legend>
+          <span class="hint">All three are optional. Leave them blank and everything still works. You can change or clear them later.</span>
+
+          <div class="form-group">
+            <label for="job_role">Your role</label>
+            <input type="text" id="job_role" name="job_role" value="<%= values.jobRole || '' %>"
+                   autocomplete="organization-title" placeholder="Delivery manager, scrum master, PM...">
+          </div>
+
+          <div class="form-group">
+            <label for="organisation">Organisation</label>
+            <input type="text" id="organisation" name="organisation" value="<%= values.organisation || '' %>" autocomplete="organization">
+          </div>
+
+          <div class="form-group">
+            <label for="experience_level">Years in delivery</label>
+            <select id="experience_level" name="experience_level">
+              <option value="">Prefer not to say</option>
+              <option value="new" <%= values.experience === 'new' ? 'selected' : '' %>>New to it</option>
+              <option value="1-3" <%= values.experience === '1-3' ? 'selected' : '' %>>1 to 3 years</option>
+              <option value="3-7" <%= values.experience === '3-7' ? 'selected' : '' %>>3 to 7 years</option>
+              <option value="7+" <%= values.experience === '7+' ? 'selected' : '' %>>More than 7 years</option>
+            </select>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Consent</legend>
+
+          <div class="form-group <%= err('accept_terms') ? 'form-group--error' : '' %>">
+            <% if (err('accept_terms')) { %><span class="error-message" id="accept_terms-error"><span class="visually-hidden">Error:</span> <%= err('accept_terms').message %></span><% } %>
+            <div class="checkbox">
+              <input type="checkbox" id="accept_terms" name="accept_terms" value="yes"
+                     <%= err('accept_terms') ? 'aria-invalid="true" aria-describedby="accept_terms-error"' : '' %>>
+              <label for="accept_terms">
+                I accept the <a href="/legal/terms">terms of use</a> and confirm I have read the
+                <a href="/legal/privacy">privacy notice</a> (version <%= config.versions.privacy %>).
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="checkbox">
+              <input type="checkbox" id="marketing_consent" name="marketing_consent" value="yes">
+              <label for="marketing_consent">
+                Email me when new templates, modules or tools are published.
+                <span class="hint">One email a month at most. Unticked on purpose &mdash; you have to choose it. Withdraw at any time in one click.</span>
+              </label>
+            </div>
+          </div>
+        </fieldset>
+
+        <button class="btn" type="submit">Create account</button>
+        <p class="mt-4">Already have an account? <a href="/signin<%= next ? '?next=' + encodeURIComponent(next) : '' %>">Sign in</a>.</p>
+      </form>
+    </div>
+
+    <aside aria-labelledby="what-we-do">
+      <div class="panel">
+        <h2 id="what-we-do" class="mt-0" style="font-size:1.0625rem">What we do with this</h2>
+        <ul>
+          <li>Show you your download history and saved templates.</li>
+          <li>Keep your learning progress and assessment results.</li>
+          <li>Keep the retro boards you create.</li>
+          <li>Count aggregate template popularity, with no link to you.</li>
+        </ul>
+        <h3 style="font-size:1rem">What we do not do</h3>
+        <ul>
+          <li>Sell or share your data. Ever, with anyone.</li>
+          <li>Store your IP address.</li>
+          <li>Run third-party trackers or advertising.</li>
+          <li>Email you anything you did not ask for.</li>
+        </ul>
+        <p class="caption">
+          Full detail in the <a href="/legal/privacy">privacy notice</a>, the
+          <a href="/governance/ropa">record of processing activities</a> and the
+          <a href="/governance/dpia">impact assessment</a> &mdash; all published,
+          which is unusual and deliberate.
+        </p>
+      </div>
+      <div class="panel panel--accent mt-4">
+        <h2 class="mt-0" style="font-size:1.0625rem">Leaving is easy</h2>
+        <p class="mb-0">
+          Export everything or delete your account permanently from your account page,
+          in two clicks, with no form and no waiting.
+        </p>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<%- include('../partials/bottom') %>

@@ -1,0 +1,76 @@
+<%- include('../partials/top') %>
+
+<div class="wrap">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <ol>
+      <li><a href="/">Home</a></li>
+      <li><a href="/learning">Learning</a></li>
+      <li><%= path.title %></li>
+    </ol>
+  </nav>
+
+  <div class="grid grid--sidebar">
+    <div>
+      <div class="page-head" style="padding-top:0">
+        <span class="eyebrow"><%= path.modules.length %> modules &middot; about <%= path.hours %> hours</span>
+        <h1><%= path.title %></h1>
+        <p class="lede"><%= path.strapline %></p>
+        <p><strong>Who it is for:</strong> <%= path.audience %></p>
+      </div>
+
+      <ol class="list-plain list-spaced">
+        <% path.modules.forEach(function (m, i) { %>
+          <li>
+            <article class="card">
+              <span class="eyebrow">
+                Module <%= i + 1 %> &middot; <%= m.minutes %> min
+                <% if (completed.has(m.id)) { %> &middot; <span class="tag tag--green">Complete</span><% } %>
+              </span>
+              <h2 style="margin-top:0;font-size:1.25rem"><a href="/learning/<%= path.id %>/<%= m.id %>"><%= m.title %></a></h2>
+              <p class="caption mb-0">You will be able to:</p>
+              <ul>
+                <% m.objectives.forEach(function (o) { %><li><%= o %></li><% }) %>
+              </ul>
+              <div class="card__foot">
+                <a class="btn btn--small" href="/learning/<%= path.id %>/<%= m.id %>"><%= completed.has(m.id) ? 'Review' : 'Open module' %></a>
+                <% if (m.quiz) { %><span class="tag">Includes a check question</span><% } %>
+              </div>
+            </article>
+          </li>
+        <% }) %>
+      </ol>
+    </div>
+
+    <aside aria-labelledby="progress-heading">
+      <div class="panel panel--brand">
+        <h2 id="progress-heading" class="mt-0" style="font-size:1.0625rem">Your progress</h2>
+        <% if (user) { %>
+          <div class="progress">
+            <div class="progress__track">
+              <div class="progress__fill <%= progress.percent === 100 ? 'progress__fill--full' : '' %>" style="width: <%= progress.percent %>%"></div>
+            </div>
+            <span class="progress__label"><%= progress.done %>/<%= progress.of %></span>
+          </div>
+          <% if (progress.percent === 100) { %>
+            <p class="mt-4 mb-0"><strong>Path complete.</strong> Worth a line on your development plan &mdash; and worth redoing the <a href="/tools/assessment">assessment</a> to see what moved.</p>
+          <% } %>
+        <% } else { %>
+          <p class="mb-0"><a href="/signup?next=/learning/<%= path.id %>">Create a free account</a> to save your place.</p>
+        <% } %>
+      </div>
+
+      <div class="panel mt-4">
+        <h2 class="mt-0" style="font-size:1.0625rem">Other paths</h2>
+        <ul class="list-plain list-spaced">
+          <li><a href="/learning/new-dm">New delivery manager</a></li>
+          <li><a href="/learning/scrum-master">Scrum master craft</a></li>
+          <li><a href="/learning/metrics">Metrics and forecasting</a></li>
+          <li><a href="/learning/stakeholders">Stakeholders and influence</a></li>
+          <li><a href="/learning/scaling">Scaling and programmes</a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<%- include('../partials/bottom') %>

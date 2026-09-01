@@ -1,0 +1,77 @@
+<%- include('../partials/top') %>
+
+<div class="wrap wrap--narrow">
+  <% if (submitted) { %>
+    <div class="page-head">
+      <h1>Request received</h1>
+      <p class="lede">
+        We have logged your <%= typeof kind !== 'undefined' ? kind : 'data' %> request and will
+        respond within one calendar month. If it turns out to be complex we will tell you inside
+        that month and explain why we need longer, as Article 12(3) allows.
+      </p>
+    </div>
+    <p><a href="/account/privacy">Back to your data and privacy</a></p>
+  <% } else { %>
+    <div class="page-head">
+      <h1>Other data requests</h1>
+      <p class="lede">
+        Access, rectification and erasure are self-service &mdash; use your
+        <a href="/account/privacy">privacy dashboard</a>, they are instant. This form is for the
+        rights that need a human.
+      </p>
+    </div>
+
+    <%- include('../partials/error-summary') %>
+
+    <form method="post" action="/account/requests">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+      <fieldset>
+        <legend class="legend--lg">What kind of request is this?</legend>
+        <div class="radio">
+          <input type="radio" id="k-restriction" name="kind" value="restriction">
+          <label for="k-restriction">Restrict processing (Art. 18)
+            <span class="hint">Ask us to stop using your data while something is disputed or corrected.</span>
+          </label>
+        </div>
+        <div class="radio">
+          <input type="radio" id="k-objection" name="kind" value="objection">
+          <label for="k-objection">Object to processing (Art. 21)
+            <span class="hint">Object to anything we do on the basis of legitimate interests &mdash; in practice, the security and activity log.</span>
+          </label>
+        </div>
+        <div class="radio">
+          <input type="radio" id="k-rectification" name="kind" value="rectification">
+          <label for="k-rectification">Rectification you cannot do yourself (Art. 16)
+            <span class="hint">Mainly changing your email address, which we do by hand to prevent account takeover.</span>
+          </label>
+        </div>
+        <div class="radio">
+          <input type="radio" id="k-portability" name="kind" value="portability">
+          <label for="k-portability">Portability in another format (Art. 20)
+            <span class="hint">The JSON export should cover this. Tell us if it does not.</span>
+          </label>
+        </div>
+        <div class="radio">
+          <input type="radio" id="k-complaint" name="kind" value="complaint">
+          <label for="k-complaint">Complaint about how we handle your data
+            <span class="hint">You can also go straight to the Information Commissioner's Office. Doing so does not affect your other rights.</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="form-group">
+        <label for="detail">Tell us more <span class="hint">Optional, but it usually gets you a faster and better answer.</span></label>
+        <textarea id="detail" name="detail" rows="6" maxlength="2000"></textarea>
+      </div>
+
+      <button class="btn" type="submit">Submit request</button>
+      <p class="caption mt-4">
+        Goes to <%= config.org.dpoEmail %> with your user id, not your message history.
+        We log that a request was made and its type, for our request register.
+      </p>
+    </form>
+  <% } %>
+</div>
+
+<%- include('../partials/bottom') %>

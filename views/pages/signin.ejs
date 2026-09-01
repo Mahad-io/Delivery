@@ -1,0 +1,37 @@
+<%- include('../partials/top') %>
+
+<div class="wrap wrap--narrow">
+  <div class="page-head">
+    <h1>Sign in</h1>
+  </div>
+
+  <%- include('../partials/error-summary') %>
+
+  <form method="post" action="/signin" novalidate>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <input type="hidden" name="next" value="<%= next %>">
+
+    <div class="form-group <%= (errors || []).length ? 'form-group--error' : '' %>">
+      <label for="email">Email address</label>
+      <% if ((errors || []).length) { %>
+        <span class="error-message" id="email-error"><span class="visually-hidden">Error:</span> <%= errors[0].message %></span>
+      <% } %>
+      <input type="email" id="email" name="email" value="<%= values.email || '' %>"
+             autocomplete="username" spellcheck="false"
+             <%= (errors || []).length ? 'aria-invalid="true" aria-describedby="email-error"' : '' %>>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <span class="hint" id="signin-password-hint">You can paste into this field.</span>
+      <input type="password" id="password" name="password" autocomplete="current-password" aria-describedby="signin-password-hint">
+    </div>
+
+    <button class="btn" type="submit">Sign in</button>
+  </form>
+
+  <p class="mt-6"><a href="/forgot">I have forgotten my password</a></p>
+  <p>No account yet? <a href="/signup<%= next ? '?next=' + encodeURIComponent(next) : '' %>">Create a free one</a>.</p>
+</div>
+
+<%- include('../partials/bottom') %>

@@ -1,0 +1,121 @@
+<%- include('../partials/top') %>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="prose">
+      <span class="eyebrow">For delivery managers, scrum masters and project managers</span>
+      <h1>The stuff you actually need on a Monday morning</h1>
+      <p class="lede">
+        Templates you can fill in this afternoon, learning paths that go deeper than a two-day
+        course, and tools that run in your browser. Free, open-licensed, and written by people
+        who have had to explain a slipped date to a sponsor.
+      </p>
+      <div class="btn-row mt-4">
+        <a class="btn" href="/toolkit">Browse the toolkit</a>
+        <a class="btn btn--secondary" href="/tools/assessment">Score your team in 8 minutes</a>
+      </div>
+    </div>
+    <ul class="hero__stats">
+      <li><b><%= resourceCount %></b><span>downloadable templates</span></li>
+      <li><b><%= moduleCount %></b><span>learning modules</span></li>
+      <li><b>6</b><span>interactive tools</span></li>
+      <li><b>&pound;0</b><span>and no advertising, ever</span></li>
+    </ul>
+  </div>
+</div>
+
+<div class="wrap">
+  <section class="section">
+    <h2 class="mt-0">Start where the problem is</h2>
+    <p class="lede prose">Six areas. Everything is downloadable, nothing is behind a paywall.</p>
+    <div class="grid grid--3 mt-4">
+      <% categories.forEach(function (c) { %>
+        <article class="card card--link">
+          <h3><a href="/toolkit?category=<%= c.id %>"><%= c.name %></a></h3>
+          <p><%= c.blurb %></p>
+        </article>
+      <% }) %>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="mt-0">Most used this month</h2>
+    <div class="grid grid--3 mt-4">
+      <% featured.filter(Boolean).forEach(function (resource) { %>
+        <%- include('../partials/resource-card', { resource: resource }) %>
+      <% }) %>
+    </div>
+  </section>
+</div>
+
+<section class="section section--tint">
+  <div class="wrap">
+    <h2 class="mt-0">Learning paths</h2>
+    <p class="lede prose">
+      Sequenced modules with practice tasks, not a video library.
+      <% if (user) { %>Your progress is saved as you go.<% } else { %>Create a free account to keep your progress.<% } %>
+    </p>
+    <div class="grid grid--2 mt-4">
+      <% paths.forEach(function (p) { %>
+        <article class="card">
+          <span class="eyebrow"><%= p.modules.length %> modules &middot; about <%= p.hours %> hours</span>
+          <h3><a href="/learning/<%= p.id %>"><%= p.title %></a></h3>
+          <p><%= p.strapline %></p>
+          <% if (user) { %>
+            <div class="progress">
+              <div class="progress__track">
+                <div class="progress__fill <%= p.progress.percent === 100 ? 'progress__fill--full' : '' %>" style="width: <%= p.progress.percent %>%"></div>
+              </div>
+              <span class="progress__label"><%= p.progress.done %>/<%= p.progress.of %></span>
+            </div>
+          <% } %>
+          <div class="card__foot">
+            <a class="btn btn--small" href="/learning/<%= p.id %>">
+              <%= user && p.progress.done > 0 ? 'Continue' : 'Start' %>
+            </a>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <section class="section">
+    <div class="grid grid--2">
+      <div class="panel panel--brand">
+        <h2 class="mt-0">Tools that run in your browser</h2>
+        <ul>
+          <li><a href="/tools/retro">Retro board</a> with twelve formats and markdown export</li>
+          <li><a href="/tools/poker">Planning poker and right-sizing</a> for a co-located or remote team</li>
+          <li><a href="/tools/forecast">Monte Carlo forecasting, Little's Law and capacity</a> calculators &mdash; nothing about your delivery leaves your device</li>
+          <li><a href="/tools/assessment">Delivery maturity self-assessment</a> with scored results and specific next steps</li>
+        </ul>
+        <a class="btn btn--small mt-4" href="/tools">See all tools</a>
+      </div>
+      <div class="panel">
+        <h2 class="mt-0">Why you have to sign up to download</h2>
+        <p>
+          Reading is free and always will be &mdash; every template, module and glossary entry
+          is fully readable without an account. We ask for an account at the point of
+          <strong>download</strong> so we can show you your own history, save your progress,
+          and tell how many people actually use a template rather than guessing.
+        </p>
+        <p>
+          It takes about twenty seconds. We ask for a name, an email and a password.
+          Job role and organisation are optional and you can leave them blank forever.
+        </p>
+        <p>
+          You can export everything we hold or delete your account completely, yourself,
+          in two clicks. No form, no waiting, no email to a support desk.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn--small btn--accent" href="/signup">Create a free account</a>
+          <a class="btn btn--small btn--plain" href="/legal/privacy">Read the privacy notice</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<%- include('../partials/bottom') %>

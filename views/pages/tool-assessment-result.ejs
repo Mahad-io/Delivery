@@ -1,0 +1,88 @@
+<%- include('../partials/top') %>
+
+<div class="wrap">
+  <div class="page-head">
+    <span class="eyebrow">Delivery maturity result</span>
+    <h1><%= result.percent %>% &mdash; <%= result.overallBand %></h1>
+    <p class="lede">
+      Strongest: <strong><%= result.strongest.name %></strong> (<%= result.strongest.percent %>%).
+      Weakest: <strong><%= result.weakest.name %></strong> (<%= result.weakest.percent %>%).
+    </p>
+    <% if (saved) { %>
+      <p class="caption">Saved to your account, so you can compare next quarter.</p>
+    <% } else { %>
+      <p class="caption">
+        Not saved &mdash; <a href="/signup?next=/tools/assessment">create a free account</a>
+        to keep results and see movement over time.
+      </p>
+    <% } %>
+  </div>
+
+  <section class="mb-6">
+    <h2 class="mt-0">By dimension</h2>
+    <div class="meter">
+      <% result.perDimension.forEach(function (d) { %>
+        <div class="meter__row">
+          <div><strong><%= d.name %></strong></div>
+          <div class="meter__bar">
+            <span class="is-<%= d.band === 'low' ? 'low' : d.band === 'mid' ? 'mid' : 'high' %>" style="width: <%= d.percent %>%"></span>
+          </div>
+          <div><%= d.percent %>%</div>
+        </div>
+      <% }) %>
+    </div>
+  </section>
+
+  <section>
+    <h2>What to do about it</h2>
+    <p class="lede prose">
+      Work on one dimension. Not three, and definitely not six. Start with
+      <strong><%= result.weakest.name %></strong>.
+    </p>
+
+    <% result.perDimension.slice().sort(function (a, b) { return a.percent - b.percent; }).forEach(function (d, i) { %>
+      <article class="card <%= i === 0 ? 'card--brand' : '' %>" style="margin-bottom:16px">
+        <span class="eyebrow">
+          <%= d.name %> &middot; <%= d.percent %>% &middot;
+          <%= d.band === 'low' ? 'Needs attention' : d.band === 'mid' ? 'Partly there' : 'Strong' %>
+          <%= i === 0 ? ' - start here' : '' %>
+        </span>
+        <p><%= d.advice %></p>
+        <div class="card__foot">
+          <% d.resources.map(resourceFor).filter(Boolean).forEach(function (r) { %>
+            <a class="btn btn--small btn--secondary" href="/resources/<%= r.id %>"><%= r.title %></a>
+          <% }) %>
+        </div>
+      </article>
+    <% }) %>
+  </section>
+
+  <section class="section">
+    <div class="grid grid--2">
+      <div class="panel">
+        <h2 class="mt-0">How to use this with your team</h2>
+        <ul class="mb-0">
+          <li>Ask each person to score it independently, then compare. The disagreements are the most useful output.</li>
+          <li>Share the aggregate with the team before anyone above them sees it.</li>
+          <li>Never compare a score with another team's. The numbers only mean something against your own history.</li>
+          <li>Redo it in a quarter and look at what moved, not at the absolute number.</li>
+        </ul>
+      </div>
+      <div class="panel panel--accent">
+        <h2 class="mt-0">And what not to do</h2>
+        <ul class="mb-0">
+          <li>Do not put it in anyone's performance review.</li>
+          <li>Do not report it upward as a delivery metric.</li>
+          <li>Do not set a target score. Goodhart's Law applies here as much as anywhere.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="btn-row">
+    <a class="btn btn--secondary" href="/tools/assessment">Take it again</a>
+    <a class="btn btn--plain" href="/toolkit">Browse the toolkit</a>
+  </div>
+</div>
+
+<%- include('../partials/bottom') %>

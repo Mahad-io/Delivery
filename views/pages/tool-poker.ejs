@@ -1,0 +1,93 @@
+<%- include('../partials/top') %>
+
+<div class="wrap">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <ol><li><a href="/">Home</a></li><li><a href="/tools">Tools</a></li><li>Estimation</li></ol>
+  </nav>
+
+  <div class="page-head">
+    <h1>Estimation and planning poker</h1>
+    <p class="lede">
+      Pick a deck, choose a card, reveal together. Nothing is transmitted &mdash; this is a
+      shared prop for a conversation, not a system of record.
+    </p>
+  </div>
+
+  <div class="grid grid--sidebar">
+    <div>
+      <form class="panel mb-6" data-poker>
+        <fieldset>
+          <legend class="legend--lg">Choose a deck</legend>
+          <% decks.forEach(function (d, i) { %>
+            <div class="radio">
+              <input type="radio" id="deck-<%= d.id %>" name="deck" value="<%= d.id %>"
+                     data-cards="<%= d.cards.join('|') %>" <%= i === 0 ? 'checked' : '' %>>
+              <label for="deck-<%= d.id %>"><%= d.name %> <span class="hint"><%= d.cards.join('  ') %></span></label>
+            </div>
+          <% }) %>
+        </fieldset>
+
+        <fieldset>
+          <legend class="legend--lg">Your estimate</legend>
+          <div id="poker-deck" class="deck" role="group" aria-label="Estimation cards"></div>
+        </fieldset>
+
+        <div class="btn-row">
+          <button class="btn" type="button" data-poker-reveal>Reveal</button>
+          <button class="btn btn--secondary" type="button" data-poker-reset>Clear</button>
+        </div>
+        <div id="poker-result" role="status" aria-live="polite" class="mt-4"></div>
+      </form>
+
+      <noscript>
+        <div class="notice notice--warn">
+          <h2>Cards need JavaScript</h2>
+          <p>The decks are printed below, so you can still use them on paper or by holding up fingers &mdash; which is how the technique started.</p>
+          <% decks.forEach(function (d) { %>
+            <p><strong><%= d.name %>:</strong> <%= d.cards.join(' &middot; ') %></p>
+          <% }) %>
+        </div>
+      </noscript>
+
+      <h2>Running a session that is worth the hour</h2>
+      <ol class="list-spaced prose">
+        <li><strong>Read the item aloud, then stop.</strong> Let someone else ask the first question.</li>
+        <li><strong>Discuss before estimating, not after.</strong> Who is it for, what changes for them, how do we know it works, what could go wrong.</li>
+        <li><strong>Everyone picks privately, then reveals together.</strong> Sequential estimating is anchoring with extra steps.</li>
+        <li><strong>Discuss only the outliers.</strong> Ask the highest and lowest to explain, in that order. The value is in what one of them knows that the others do not.</li>
+        <li><strong>Re-estimate once.</strong> If you still disagree after a second round, the item is not understood well enough &mdash; split it or send it back to refinement.</li>
+        <li><strong>Stop when the conversation stops producing new information.</strong> Precision beyond that point is invented.</li>
+      </ol>
+
+      <h2>When to stop estimating altogether</h2>
+      <div class="panel panel--brand prose">
+        <p>
+          If your items are right-sized &mdash; small enough to finish comfortably in a sprint
+          &mdash; then counting items forecasts at least as well as summing points, and costs an
+          hour a fortnight less. Many mature teams drop estimation entirely and use the
+          right-sizing deck above: fits comfortably, fits just, too big, do not know yet.
+        </p>
+        <p class="mb-0">
+          Keep estimating when the team is new to the domain, when you are comparing two
+          approaches, or when the session reliably uncovers hidden work. Drop it when the number
+          is never used, when it is being compared between teams, or when the session has become
+          a ritual.
+        </p>
+      </div>
+    </div>
+
+    <aside aria-labelledby="poker-side">
+      <div class="panel">
+        <h2 id="poker-side" class="mt-0" style="font-size:1.0625rem">Related</h2>
+        <ul class="list-plain list-spaced">
+          <li><a href="/learning/metrics/estimation">Module: estimation, when it helps</a></li>
+          <li><a href="/resources/flow-metrics-starter">Flow metrics starter pack</a></li>
+          <li><a href="/resources/velocity-capacity-tracker">Capacity and throughput tracker</a></li>
+          <li><a href="/tools/forecast">Monte Carlo forecast</a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<%- include('../partials/bottom', { scripts: ['poker'] }) %>

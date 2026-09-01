@@ -1,0 +1,39 @@
+<%- include('../partials/top') %>
+
+<div class="wrap">
+  <div class="page-head">
+    <h1>Delivery glossary</h1>
+    <p class="lede">
+      <%= total %> terms, defined in one sentence each, with the opinion included where the
+      opinion matters. Free to reuse under <a href="/legal/licence">CC BY 4.0</a> &mdash; paste it
+      into your team wiki.
+    </p>
+  </div>
+
+  <form method="get" action="/glossary" role="search" class="mb-6">
+    <div class="form-group">
+      <label for="q">Search the glossary</label>
+      <input type="search" id="q" name="q" value="<%= query %>" autocomplete="off">
+    </div>
+    <button class="btn btn--small" type="submit">Search</button>
+    <% if (query) { %> <a class="btn btn--small btn--plain" href="/glossary">Show all <%= total %></a><% } %>
+  </form>
+
+  <p class="results-count" role="status"><%= terms.length %> term<%= terms.length === 1 ? '' : 's' %></p>
+
+  <% if (!terms.length) { %>
+    <div class="notice notice--warn">
+      <h2>Nothing matched</h2>
+      <p>Missing a term? Email <a href="mailto:<%= config.org.supportEmail %>"><%= config.org.supportEmail %></a> and we will add it.</p>
+    </div>
+  <% } else { %>
+    <dl class="prose">
+      <% terms.forEach(function (t) { %>
+        <dt style="font-weight:700;margin-top:24px"><%= t.term %></dt>
+        <dd style="margin:4px 0 0"><%= t.definition %></dd>
+      <% }) %>
+    </dl>
+  <% } %>
+</div>
+
+<%- include('../partials/bottom') %>

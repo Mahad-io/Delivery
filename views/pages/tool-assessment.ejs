@@ -1,0 +1,67 @@
+<%- include('../partials/top') %>
+<% var vals = (typeof values !== 'undefined' && values) ? values : {}; %>
+
+<div class="wrap">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <ol><li><a href="/">Home</a></li><li><a href="/tools">Tools</a></li><li>Maturity assessment</li></ol>
+  </nav>
+
+  <div class="page-head">
+    <h1><%= assessment.title %></h1>
+    <p class="lede"><%= assessment.intro %></p>
+    <div class="inset inset--warn">
+      <p class="mb-0">
+        <strong>Score what your team observably does, not what it intends to do.</strong>
+        Every statement is behavioural on purpose. If you are not sure, score lower &mdash;
+        the result is only useful if it is honest, and nobody else sees it.
+      </p>
+    </div>
+  </div>
+
+  <%- include('../partials/error-summary') %>
+
+  <% if (history && history.length) { %>
+    <div class="panel panel--brand mb-6">
+      <h2 class="mt-0">Your previous results</h2>
+      <ul class="list-plain">
+        <% history.forEach(function (h) { %>
+          <li><strong><%= h.scores.percent %>%</strong> &mdash; <%= h.created_at %> (<%= h.scores.overallBand %>)</li>
+        <% }) %>
+      </ul>
+      <p class="caption mb-0">Only meaningful against your own history. Do not compare with another team.</p>
+    </div>
+  <% } %>
+
+  <form method="post" action="/tools/assessment">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+    <% assessment.dimensions.forEach(function (dim) { %>
+      <section class="mb-6">
+        <h2><%= dim.name %></h2>
+        <% dim.questions.forEach(function (qtext, qi) { %>
+          <fieldset class="panel" style="margin-bottom:16px">
+            <legend><%= qtext %></legend>
+            <% assessment.scale.forEach(function (s) { %>
+              <div class="radio">
+                <input type="radio" id="<%= dim.id %>_<%= qi %>_<%= s.value %>" name="<%= dim.id %>_<%= qi %>" value="<%= s.value %>"
+                       <%= String(vals[dim.id + '_' + qi]) === String(s.value) ? 'checked' : '' %>>
+                <label for="<%= dim.id %>_<%= qi %>_<%= s.value %>"><%= s.value %> &mdash; <%= s.label %></label>
+              </div>
+            <% }) %>
+          </fieldset>
+        <% }) %>
+      </section>
+    <% }) %>
+
+    <button class="btn" type="submit">See my result</button>
+    <% if (!user) { %>
+      <p class="caption mt-4">
+        You will see your full result either way. Creating a
+        <a href="/signup?next=/tools/assessment">free account</a> is only needed to keep the
+        history so you can compare next quarter.
+      </p>
+    <% } %>
+  </form>
+</div>
+
+<%- include('../partials/bottom') %>

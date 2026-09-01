@@ -1,0 +1,70 @@
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="grid grid--4">
+        <div>
+          <h2>Resources</h2>
+          <ul>
+            <li><a href="/toolkit">All templates</a></li>
+            <li><a href="/learning">Learning paths</a></li>
+            <li><a href="/tools">Interactive tools</a></li>
+            <li><a href="/glossary">Glossary</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Career</h2>
+          <ul>
+            <li><a href="/careers">Overview</a></li>
+            <li><a href="/careers/competencies">Competency framework</a></li>
+            <li><a href="/careers/interviews">Interview questions</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Your data</h2>
+          <ul>
+            <li><a href="/legal/privacy">Privacy notice</a></li>
+            <li><a href="/cookies">Cookie settings</a></li>
+            <li><a href="/legal/accessibility">Accessibility statement</a></li>
+            <% if (user) { %><li><a href="/account/privacy">Your data and privacy</a></li><% } %>
+          </ul>
+        </div>
+        <div>
+          <h2>About</h2>
+          <ul>
+            <li><a href="/legal/terms">Terms of use</a></li>
+            <li><a href="/legal/licence">Licence (CC BY 4.0)</a></li>
+            <li><a href="/legal/security">Security disclosure</a></li>
+            <li><a href="/legal">All legal and governance</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-meta">
+        <p>
+          Everything here is free and released under a
+          <a href="/legal/licence">Creative Commons Attribution 4.0 licence</a> &mdash;
+          use it with your team, adapt it, sell it in your consulting work. Just credit us.
+        </p>
+        <p>
+          Built to <a href="/legal/accessibility">WCAG 2.2 AA</a>, works without JavaScript,
+          no third-party trackers, no advertising.
+          Need help or found a problem? <a href="mailto:<%= config.org.supportEmail %>"><%= config.org.supportEmail %></a>.
+        </p>
+        <p class="caption">
+          &copy; <%= year %> <%= config.org.legalName %>.
+          Privacy notice v<%= config.versions.privacy %>.
+          <a href="/healthz">Service status</a>.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script nonce="<%= cspNonce %>" src="/js/app.js"></script>
+  <% if (typeof scripts !== 'undefined' && scripts) { %>
+    <% scripts.forEach(function (s) { %>
+      <script nonce="<%= cspNonce %>" src="/js/<%= s %>.js"></script>
+    <% }) %>
+  <% } %>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<%- include('../partials/top') %>
+
+<div class="wrap">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <ol>
+      <li><a href="/">Home</a></li>
+      <li>Toolkit<% if (activeCategory) { %> <span aria-hidden="true">›</span> <%= activeCategory.name %><% } %></li>
+    </ol>
+  </nav>
+
+  <div class="page-head">
+    <h1><%= activeCategory ? activeCategory.name : 'Delivery toolkit' %></h1>
+    <p class="lede"><%= activeCategory ? activeCategory.blurb : 'Every template, filterable. Read the whole thing on the page; create a free account when you want to download it.' %></p>
+  </div>
+
+  <div class="grid grid--sidebar-left">
+    <div>
+      <form class="filters" method="get" action="/toolkit" role="search">
+        <div class="form-group">
+          <label for="q">Search templates</label>
+          <input type="search" id="q" name="q" value="<%= filters.q %>" autocomplete="off">
+        </div>
+
+        <fieldset>
+          <legend>Level</legend>
+          <ul class="filter-list">
+            <li><a href="/toolkit<%= filters.category ? '?category=' + filters.category : '' %>" aria-current="<%= !filters.level %>">Any level</a></li>
+            <% ['core','intermediate'].forEach(function (lv) { %>
+              <li><a href="/toolkit?level=<%= lv %><%= filters.category ? '&category=' + filters.category : '' %>" aria-current="<%= filters.level === lv %>"><%= lv.charAt(0).toUpperCase() + lv.slice(1) %></a></li>
+            <% }) %>
+          </ul>
+        </fieldset>
+
+        <fieldset>
+          <legend>Category</legend>
+          <ul class="filter-list">
+            <li><a href="/toolkit" aria-current="<%= !filters.category %>">All categories</a></li>
+            <% categories.forEach(function (c) { %>
+              <li><a href="/toolkit?category=<%= c.id %>" aria-current="<%= filters.category === c.id %>"><%= c.name %></a></li>
+            <% }) %>
+          </ul>
+        </fieldset>
+
+        <fieldset>
+          <legend>Topic</legend>
+          <ul class="tag-list">
+            <% tags.forEach(function (t) { %>
+              <li><a class="tag <%= filters.tag === t.tag ? 'tag--brand' : '' %>" href="/toolkit?tag=<%= encodeURIComponent(t.tag) %>"><%= t.tag %> (<%= t.count %>)</a></li>
+            <% }) %>
+          </ul>
+        </fieldset>
+
+        <button class="btn btn--small btn--block" type="submit">Apply filters</button>
+        <p class="mt-4"><a href="/toolkit">Clear all filters</a></p>
+      </form>
+    </div>
+
+    <div>
+      <p class="results-count" role="status">
+        <%= results.length %> template<%= results.length === 1 ? '' : 's' %><% if (filters.q) { %> matching &ldquo;<%= filters.q %>&rdquo;<% } %>
+      </p>
+
+      <% if (!results.length) { %>
+        <div class="notice notice--warn">
+          <h2>Nothing matched</h2>
+          <p>Try a broader search, or <a href="/toolkit">clear the filters</a>. If there is something you need that we do not have, email <a href="mailto:<%= config.org.supportEmail %>"><%= config.org.supportEmail %></a> &mdash; requests are how most of these got written.</p>
+        </div>
+      <% } else { %>
+        <div class="grid grid--2">
+          <% results.forEach(function (resource) { %>
+            <%- include('../partials/resource-card', { resource: resource, savedIds: savedIds }) %>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/bottom') %>

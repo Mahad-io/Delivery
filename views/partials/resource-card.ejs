@@ -1,0 +1,15 @@
+<article class="card card--link">
+  <span class="eyebrow"><%= resource.level === 'core' ? 'Core' : resource.level === 'intermediate' ? 'Intermediate' : 'Advanced' %> &middot; <%= resource.minutes %> min to fill in</span>
+  <h3><a href="/resources/<%= resource.id %>"><%= resource.title %></a></h3>
+  <p><%= resource.summary %></p>
+  <div class="card__foot">
+    <% (resource.formats || []).forEach(function (f) { %>
+      <a class="btn btn--small btn--secondary" href="/download/<%= resource.id %>.<%= f %>">
+        Download <%= f.toUpperCase() %>
+      </a>
+    <% }) %>
+    <% if (typeof savedIds !== 'undefined' && savedIds.has(resource.id)) { %>
+      <span class="tag tag--green">Saved</span>
+    <% } %>
+  </div>
+</article>

@@ -1,0 +1,95 @@
+<%- include('../partials/top') %>
+
+<div class="wrap">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <ol><li><a href="/">Home</a></li><li><a href="/tools">Tools</a></li><li>Retro board</li></ol>
+  </nav>
+
+  <div class="grid grid--sidebar">
+    <div>
+      <div class="page-head" style="padding-top:0">
+        <h1>Retro board</h1>
+        <p class="lede">
+          Pick a format, run the session, export the result with an actions table ready to fill in.
+          Boards are private to your account &mdash; they are never shared, published or read by us.
+        </p>
+      </div>
+
+      <div class="panel panel--brand">
+        <h2 class="mt-0">Create a board</h2>
+        <form method="post" action="/tools/retro">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <div class="form-group">
+            <label for="title">Board title</label>
+            <span class="hint" id="title-hint">Something you will recognise in three months. "Sprint 18 retro" beats "Retro".</span>
+            <input type="text" id="title" name="title" aria-describedby="title-hint" maxlength="120">
+          </div>
+          <fieldset>
+            <legend>Format</legend>
+            <span class="hint">Rotate the format. The same one every sprint produces the same conversation.</span>
+            <% templates.forEach(function (t, i) { %>
+              <div class="radio">
+                <input type="radio" id="tpl-<%= t.id %>" name="template" value="<%= t.id %>" <%= i === 0 ? 'checked' : '' %>>
+                <label for="tpl-<%= t.id %>">
+                  <%= t.name %>
+                  <span class="hint"><%= t.columns.map(function (c) { return c.name; }).join(' &middot; ') %></span>
+                </label>
+              </div>
+            <% }) %>
+          </fieldset>
+          <button class="btn" type="submit">Create board</button>
+          <% if (!user) { %>
+            <p class="caption mt-4">You will be asked to create a free account first &mdash; boards need somewhere to live.</p>
+          <% } %>
+        </form>
+      </div>
+
+      <% if (user) { %>
+        <h2>Your boards</h2>
+        <% if (!boards.length) { %>
+          <p>No boards yet.</p>
+        <% } else { %>
+          <ul class="list-plain list-spaced">
+            <% boards.forEach(function (b) { %>
+              <li class="card">
+                <h3 style="margin-top:0;font-size:1.0625rem"><a href="/tools/retro/<%= b.id %>"><%= b.title %></a></h3>
+                <p class="caption mb-0">
+                  <%= (templates.find(function (t) { return t.id === b.template; }) || {}).name %>
+                  &middot; last changed <%= b.updated_at %>
+                </p>
+              </li>
+            <% }) %>
+          </ul>
+        <% } %>
+      <% } %>
+
+      <h2>The five-phase spine</h2>
+      <p class="prose">Every format fits the same shape. If you only remember one thing, remember to open by reviewing last time's actions.</p>
+      <ol class="list-spaced prose">
+        <li><strong>Set the stage &mdash; 5 min.</strong> Review last retro's actions. Check people are actually present.</li>
+        <li><strong>Gather data &mdash; 15 min.</strong> Silent writing first, every time. It doubles the ideas and flattens seniority.</li>
+        <li><strong>Generate insight &mdash; 15 min.</strong> Cluster, then ask why until you reach something you can change.</li>
+        <li><strong>Decide what to do &mdash; 15 min.</strong> Two actions maximum, each with an owner and a date.</li>
+        <li><strong>Close &mdash; 10 min.</strong> How was this retro, and what does the team want next time.</li>
+      </ol>
+      <p><a href="/resources/retro-pack">Download the full retro pack</a> &mdash; twelve formats with prompts, timings and facilitation notes.</p>
+    </div>
+
+    <aside aria-labelledby="retro-side">
+      <div class="panel">
+        <h2 id="retro-side" class="mt-0" style="font-size:1.0625rem">A word on privacy</h2>
+        <p>
+          Retro notes can be candid. Please keep them about the work, not about named people
+          &mdash; if you type someone else's personal data in here, you become the controller
+          for it and you need your own lawful basis.
+        </p>
+        <p class="mb-0">
+          Boards are visible only to you, are included in your data export, and are deleted
+          permanently when you delete the board or your account.
+        </p>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<%- include('../partials/bottom') %>

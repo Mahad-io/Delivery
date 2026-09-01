@@ -1,0 +1,29 @@
+<%- include('../partials/top') %>
+
+<div class="wrap wrap--narrow">
+  <div class="page-head">
+    <h1>Choose a new password</h1>
+  </div>
+
+  <%- include('../partials/error-summary') %>
+
+  <form method="post" action="/reset" novalidate>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <input type="hidden" name="token" value="<%= token %>">
+
+    <div class="form-group">
+      <label for="password">New password</label>
+      <span class="hint" id="pw-hint">At least 12 characters. Three random words works well.</span>
+      <input type="password" id="password" name="password" autocomplete="new-password" minlength="12" aria-describedby="pw-hint">
+    </div>
+
+    <div class="form-group">
+      <label for="password_confirm">Confirm new password</label>
+      <input type="password" id="password_confirm" name="password_confirm" autocomplete="new-password">
+    </div>
+
+    <button class="btn" type="submit">Save new password</button>
+  </form>
+</div>
+
+<%- include('../partials/bottom') %>

@@ -1,0 +1,61 @@
+<%- include('../partials/top') %>
+
+<div class="wrap wrap--narrow">
+  <div class="page-head">
+    <h1>Cookie settings</h1>
+    <p class="lede">
+      Change these at any time. Turning something off takes effect immediately and clears the
+      associated storage.
+    </p>
+    <% if (current) { %>
+      <p class="caption">
+        You last chose on <%= current.decidedAt %> (policy version <%= current.version %>).
+        Your full consent history is in your <a href="/account/privacy">privacy dashboard</a>
+        and your data export.
+      </p>
+    <% } %>
+  </div>
+
+  <form method="post" action="/consent">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <input type="hidden" name="next" value="/cookies">
+    <input type="hidden" name="decision" value="custom">
+
+    <% purposes.forEach(function (p) { %>
+      <div class="panel mb-4">
+        <h2 style="margin-top:0;font-size:1.125rem"><%= p.name %></h2>
+        <p><%= p.summary %></p>
+        <p class="caption"><strong>Lawful basis:</strong> <%= p.lawfulBasis %></p>
+        <% if (p.required) { %>
+          <p class="mb-0"><span class="tag tag--brand">Always on</span> Strictly necessary, so there is nothing to switch. Blocking it in your browser will stop sign-in and forms working.</p>
+        <% } else { %>
+          <div class="checkbox">
+            <input type="checkbox" id="<%= p.id %>" name="<%= p.id %>" value="yes" <%= current && current[p.id] ? 'checked' : '' %>>
+            <label for="<%= p.id %>">Allow <%= p.name.toLowerCase() %></label>
+          </div>
+        <% } %>
+      </div>
+    <% }) %>
+
+    <button class="btn" type="submit">Save cookie settings</button>
+  </form>
+
+  <div class="btn-row mt-4">
+    <form method="post" action="/consent">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <input type="hidden" name="next" value="/cookies">
+      <input type="hidden" name="decision" value="reject">
+      <button class="btn btn--secondary" type="submit">Reject all optional</button>
+    </form>
+    <form method="post" action="/consent">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <input type="hidden" name="next" value="/cookies">
+      <input type="hidden" name="decision" value="accept-all">
+      <button class="btn btn--secondary" type="submit">Accept all optional</button>
+    </form>
+  </div>
+
+  <p class="mt-6"><a href="/legal/cookies">Read the full cookie policy</a>, including the table of every cookie we set.</p>
+</div>
+
+<%- include('../partials/bottom') %>
